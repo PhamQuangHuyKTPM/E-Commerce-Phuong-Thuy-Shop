@@ -59,16 +59,20 @@ public class CartController extends HttpServlet {
 					for (CartModel cartModel : cart_list) {
 						if (cartModel.getId().equals(id)) {
 							exist = true;
-							req.setAttribute("text", "product is exist");
+//							req.setAttribute("text", "product is exist");
+						
 						}
 					}
 					if (exist == false) {
 						list.add(cart);
-						req.setAttribute("text", "product added");
+//						req.setAttribute("text", "product added");
+						
+						
 					}
 				}
-				req.setAttribute("list", list);
-				req.getRequestDispatcher("/views/web/test.jsp").forward(req, resp);
+//				req.setAttribute("list", list);
+//				req.getRequestDispatcher("/views/web/test.jsp").forward(req, resp);
+				resp.sendRedirect("/home");
 			}
 		}
 		if("delete".equals(status)) {
