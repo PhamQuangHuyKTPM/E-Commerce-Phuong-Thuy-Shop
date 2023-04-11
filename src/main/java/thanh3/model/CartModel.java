@@ -60,4 +60,10 @@ public class CartModel extends ProductModel {
 		this.tongtien = tongtien;
 	}
 
+	@Override
+	public String toString() {
+		return "CartModel [maGioHang=" + maGioHang + ", maDH=" + maDH + ", maSP=" + maSP + ", totalCart=" + totalCart
+				+ ", tongtien=" + tongtien + "]";
+	}
+	
 }

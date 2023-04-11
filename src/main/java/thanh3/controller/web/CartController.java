@@ -49,9 +49,10 @@ public class CartController extends HttpServlet {
 
 				if (cart_list == null) {
 					list.add(cart);
-					session.setAttribute("cart-list", list);
-					req.setAttribute("text", "session created and added the list");
-					req.getRequestDispatcher("/views/web/test.jsp").forward(req, resp);
+					cart_list = list;
+					session.setAttribute("cart-list", cart_list);
+					resp.sendRedirect("cart");
+					
 				} else if (cart_list != null) {
 					list = cart_list;
 					boolean exist = false; // exist de kiem tra san pham da ton tai hay chua
@@ -59,38 +60,37 @@ public class CartController extends HttpServlet {
 					for (CartModel cartModel : cart_list) {
 						if (cartModel.getId().equals(id)) {
 							exist = true;
-//							req.setAttribute("text", "product is exist");
-						
+							req.setAttribute("text", "product is exist");
+							break;
 						}
 					}
-					if (exist == false) {
-						list.add(cart);
-//						req.setAttribute("text", "product added");
-						
-						
+					if (!exist) {
+						cart_list.add(cart);
+						req.setAttribute("text", "product added");
 					}
+					resp.sendRedirect("cart");
 				}
-//				req.setAttribute("list", list);
-//				req.getRequestDispatcher("/views/web/test.jsp").forward(req, resp);
-				resp.sendRedirect("/home");
+			
+			}
+			if("delete".equals(status)) {
+				HttpSession session = req.getSession();
+				List<CartModel> cart_list = (List<CartModel>) session.getAttribute("cart-list");
+				String id = req.getParameter("id");
+				productDao.removeCart(cart_list, id);
+				resp.sendRedirect("cart");
 			}
 		}
-		if("delete".equals(status)) {
-			HttpSession session = req.getSession();
-			List<CartModel> cart_list = (List<CartModel>) session.getAttribute("cart-list");
-			String id = req.getParameter("id");
-			productDao.removeCart(cart_list, id);
-			resp.sendRedirect("cart");
-		}
+		
 		else {
 			HttpSession session = req.getSession();
 			List<CartModel> cart_list = (List<CartModel>) session.getAttribute("cart-list");
+			for (CartModel cartt : cart_list) {
+				System.out.println(cartt);
+			}
 			List<CartModel> cartProduct = productDao.getCartProducts(cart_list);
 			req.setAttribute("cartProduct", cartProduct);
 			req.getRequestDispatcher("/views/web/cart.jsp").forward(req, resp);
 		}
-			
-		
 	}
 
 }
