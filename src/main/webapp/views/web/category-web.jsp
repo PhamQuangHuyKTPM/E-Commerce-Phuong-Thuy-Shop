@@ -244,18 +244,29 @@
 										<h6>${products.dongia }VND</h6>
 									</div>
 								</div>
-								<div class="toast show" style="display : none" id="id_${products.id }">
-									
+								<div class="toast show" style="display: none"
+									id="id_${products.id }">
+
 									<div class="toast-body">Đã thêm vào giỏ hàng</div>
 								</div>
-								
+
 								<div
 									class="card-footer d-flex justify-content-between bg-light border">
 									<a href="chi-tiet-san-pham?id=${products.id }"
 										class="btn btn-sm text-dark p-0"><i
-										class="fas fa-eye text-primary mr-1"></i>View Detail</a> <div
-										 class="btn btn-sm text-dark p-0"><i
-										class="fas fa-shopping-cart text-primary mr-1" id="add_${products.id }"></i>Add To Cart</div>
+										class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+										
+										<c:if test="${manager != null }">
+										 <a href="categoryWeb?status=add-to-cart&id=${products.id }" class="btn btn-sm text-dark p-0"><i
+										class="fas fa-shopping-cart text-primary mr-1"
+										id="add_${products.id }"></i>Add To Cart</a>
+										</c:if>
+										
+										<c:if test="${manager == null }">
+										 <a href="login" class="btn btn-sm text-dark p-0"><i
+										class="fas fa-shopping-cart text-primary mr-1"
+										id="add_${products.id }"></i>Add To Cart</a>
+										</c:if>
 								</div>
 								<script>
 									document.getElementById("add_" + ${products.id }).addEventListener("click", myFunction);

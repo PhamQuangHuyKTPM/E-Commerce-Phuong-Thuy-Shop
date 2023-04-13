@@ -30,6 +30,11 @@
 <!-- Customized Bootstrap Stylesheet -->
 <!--<link href="<c:url value='./template/web/css/style.css' />" rel="stylesheet">  -->
 <link href="./template/web/css/style.css" rel="stylesheet">
+
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <title>Giỏ hàng</title>
 </head>
 <body>
@@ -58,7 +63,7 @@
 								<td class="align-middle"><img src="${carts.image }" alt=""
 									style="width: 70px;"></td>
 								<td class="align-middle">${carts.ten }</td>
-								<td class="align-middle">${carts.dongia } VND</td>
+								<td class="align-middle">${carts.dongia }VND</td>
 								<td class="align-middle">
 									<div class="input-group quantity mx-auto" style="width: 100px;">
 										<div class="input-group-btn">
@@ -76,11 +81,11 @@
 										</div>
 									</div>
 								</td>
-								<td class="align-middle">${carts.tongtien } VND</td>
-								<td class="align-middle"><a href="cart?status=delete&id=${carts.maGioHang }"
-										class="btn btn-sm btn-primary">
-										<i class="fa fa-times"></i>
-									</a></td>
+								<td class="align-middle">${carts.tongtien }VND</td>
+								<td class="align-middle"><a
+									href="cart?status=delete&id=${carts.maGioHang }"
+									class="btn btn-sm btn-primary"> <i class="fa fa-times"></i>
+								</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -90,9 +95,9 @@
 				<form class="mb-5" action="">
 					<div class="input-group">
 						<input type="text" class="form-control p-4"
-							placeholder="Coupon Code">
+							placeholder="Mã phiếu giảm giá">
 						<div class="input-group-append">
-							<button class="btn btn-primary">Apply Coupon</button>
+							<button class="btn btn-primary">Xác nhận</button>
 						</div>
 					</div>
 				</form>
@@ -113,10 +118,63 @@
 					<div class="card-footer border-secondary bg-transparent">
 						<div class="d-flex justify-content-between mt-2">
 							<h5 class="font-weight-bold">Total</h5>
-							<h5 class="font-weight-bold">$160</h5>
+							<h5 class="font-weight-bold">${total }</h5>
 						</div>
-						<button class="btn btn-block btn-primary my-3 py-3">Proceed
-							To Checkout</button>
+						<c:if test="${manager != null }">
+							<button class="btn btn-block btn-primary my-3 py-3"
+								data-bs-toggle="modal" data-bs-target="#myModal">Mua
+								hàng</button>
+
+							<!-- The Modal -->
+							<div class="modal fade" id="myModal">
+								<div class="modal-dialog modal-lg">
+									<div class="modal-content">
+
+										<!-- Modal Header -->
+										<div class="modal-header">
+											<h4 class="modal-title">
+												Thông tin nhận hàng
+												<h4>
+										</div>
+
+										<!-- Modal body -->
+										<div class="modal-body">
+
+											<form>
+												<div class="input-group mb-3 mt-3">
+													<span class="input-group-text">Họ tên</span> <input type="text"
+														class="form-control" placeholder="Họ tên" value="${manager.hoten }">
+												</div>
+												
+												<div class="input-group mb-3 ">
+													<span class="input-group-text">Địa chỉ</span> <input type="text"
+														class="form-control" placeholder="Địa chỉ" value="${manager.diachi }">
+												</div>
+												
+												<div class="input-group mb-3">
+													<span class="input-group-text">Số điện thoại</span> <input type="text"
+														class="form-control" placeholder="Số điện thoại" value="${manager.sdt }">
+												</div>
+											</form>
+
+										</div>
+
+										<!-- Modal footer -->
+										<div class="modal-footer">
+											<button type="button" class="btn btn-light"
+												data-bs-dismiss="modal">Hủy</button>
+											<a href="buy?id=${manager.id_user }&total=${total}"><button type="button" class="btn btn-danger ">Xác nhận mua hàng</button></a>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</c:if>
+
+						<c:if test="${manager == null }">
+							<a href="login" class="btn btn-block btn-primary my-3 py-3">Đăng
+								nhập để được mua hàng</a>
+						</c:if>
 					</div>
 				</div>
 			</div>

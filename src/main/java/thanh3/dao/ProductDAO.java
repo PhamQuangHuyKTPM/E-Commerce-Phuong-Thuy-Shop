@@ -50,7 +50,7 @@ public class ProductDAO extends AbtractDAO {
 		List<CartModel> products = new ArrayList<>();
 		
 		try {
-			if(list.size() > 0) {
+			if(list.size() >= 0) {
 				for (CartModel items : list) {
 					String sql = "select * from sanpham where masp = ?";
 					con = getConnection();
@@ -65,8 +65,9 @@ public class ProductDAO extends AbtractDAO {
 						cart.setImage(rs.getString("image"));
 						cart.setDanhmuc(rs.getString("danhmuc"));
 						cart.setDongia(rs.getDouble("dongia"));
-						cart.setTongtien(rs.getDouble("dongia") * items.getTotalCart());
 						cart.setTotalCart(items.getTotalCart());
+						cart.setTongtien(rs.getDouble("dongia") * items.getTotalCart());
+						
 						products.add(cart);
 					}
 				}
@@ -143,6 +144,35 @@ public class ProductDAO extends AbtractDAO {
 				return p;
 			}
 			return null;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
+	
+	public List<ProductModel> searchLikeName(String name) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sql = "select * from sanpham where tensp like '"+ name +"%'";
+		List<ProductModel> list = new ArrayList<ProductModel>();
+
+		try {
+			con = getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				ProductModel p = new ProductModel(rs.getString("masp"),
+						rs.getString("tensp"),
+						rs.getString("mota"),
+						rs.getDouble("dongia"),
+						rs.getString("danhmuc"),
+						rs.getInt("soluong"),
+						rs.getString("image"));
+				list.add(p);
+			}
+			return list;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			return null;

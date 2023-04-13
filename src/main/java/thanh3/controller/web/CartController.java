@@ -30,6 +30,7 @@ public class CartController extends HttpServlet {
 		resp.setContentType("text/html; charset=UTF-8");
 
 		List<CategoryModel> categories = categoryDao.findAll();
+		Double total = 0.0;
 		req.setAttribute("categories", categories);
 
 		String status = req.getParameter("status");
@@ -46,11 +47,12 @@ public class CartController extends HttpServlet {
 
 				HttpSession session = req.getSession();
 				List<CartModel> cart_list = (List<CartModel>) session.getAttribute("cart-list");
-
 				if (cart_list == null) {
 					list.add(cart);
 					cart_list = list;
 					session.setAttribute("cart-list", cart_list);
+					total = cart.getTotalCart() * cart.getDongia();
+					req.setAttribute("total", total);
 					resp.sendRedirect("cart");
 					
 				} else if (cart_list != null) {
@@ -58,15 +60,18 @@ public class CartController extends HttpServlet {
 					boolean exist = false; // exist de kiem tra san pham da ton tai hay chua
 
 					for (CartModel cartModel : cart_list) {
+						
 						if (cartModel.getId().equals(id)) {
 							exist = true;
-							req.setAttribute("text", "product is exist");
 							break;
 						}
 					}
 					if (!exist) {
 						cart_list.add(cart);
-						req.setAttribute("text", "product added");
+						for (CartModel cartModel : cart_list) {
+							total += cartModel.getTongtien();
+						}
+						req.setAttribute("total", total);
 					}
 					resp.sendRedirect("cart");
 				}
@@ -84,11 +89,13 @@ public class CartController extends HttpServlet {
 		else {
 			HttpSession session = req.getSession();
 			List<CartModel> cart_list = (List<CartModel>) session.getAttribute("cart-list");
-			for (CartModel cartt : cart_list) {
-				System.out.println(cartt);
-			}
+			
 			List<CartModel> cartProduct = productDao.getCartProducts(cart_list);
 			req.setAttribute("cartProduct", cartProduct);
+			for (CartModel cartModel : cartProduct) {
+				total += cartModel.getTongtien();
+			}
+			req.setAttribute("total", total);
 			req.getRequestDispatcher("/views/web/cart.jsp").forward(req, resp);
 		}
 	}

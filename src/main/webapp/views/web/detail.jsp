@@ -105,9 +105,18 @@
 							</button>
 						</div>
 					</div>
-					<a href="chi-tiet-san-pham?status=add-to-cart&id=${product.id }" class="btn btn-primary px-3">
+					<c:if test="${manager != null }">
+						<a href="chi-tiet-san-pham?status=add-to-cart&id=${product.id }"
+							class="btn btn-primary px-3"> <i
+							class="fa fa-shopping-cart mr-1"></i> Add To Cart
+						</a>
+					</c:if>
+					
+					<c:if test="${manager == null }">
+					<a href="login" class="btn btn-primary px-3">
 						<i class="fa fa-shopping-cart mr-1"></i> Add To Cart
 					</a>
+					</c:if>
 				</div>
 				<div class="d-flex pt-2">
 					<p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
